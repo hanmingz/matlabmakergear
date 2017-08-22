@@ -1,0 +1,33 @@
+cropped params:
+%950,450, last was 450/500
+         A(:, 850:1600) = [];
+        A(:,1:650) = [];
+        
+        A(900:1200,:) = [];
+        A(1:500,:) = [];
+background = imopen(A,strel('square',200));
+
+_________________________________________________
+%moderately functioning cropped params:
+ A(:, 850:1600) = [];
+        A(:,1:650) = [];
+        
+        A(900:1200,:) = [];
+        A(1:500,:) = [];
+        background = imopen(A,strel('square',200));
+
+_______________________________________________________
+uncropped params - yields best model performance:
+        A(:,1000:1600) = [];
+        A(:,1:400) = []; 
+        A(950:1200,:) = [];
+        background = imopen(A,strel('rectangle',[500,500]));
+
+___________________________________________________________
+'perfect' parameters
+ A(:, 800:1600) = [];
+        A(:,1:650) = [];
+        
+        A(900:1200,:) = [];
+        A(1:600,:) = [];
+        background = imopen(A,strel('square',200));

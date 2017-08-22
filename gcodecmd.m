@@ -1,5 +1,41 @@
+
+%This runs a matlab gui that runs concurrently with the file
+%classification_code.m
 function varargout = gcodecmd(varargin)
 % Begin initialization code - DO NOT EDIT
+
+        global obj;
+        
+        h = obj.Grab;
+        
+        A = h;
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %These parameters can be modified according to parameters.txt to
+        %obtain optimized results
+        A(:, 800:1600) = [];
+        A(:,1:650) = [];
+        
+        A(900:1200,:) = [];
+        A(1:600,:) = [];
+        background = imopen(A,strel('square',200));
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        I2 = A - background;
+        I3 = imadjust(I2);
+        global categoryClassifier;
+        %Perform the actual classification
+        [labelIdx, score] = predict(categoryClassifier, I3);
+       
+        
+        resultOfClassification = categoryClassifier.Labels(labelIdx);
+        global res;
+        res = resultOfClassification;
+        disp(resultOfClassification); 
+        
+        %checking code
+        
+        
+
+
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -21,6 +57,7 @@ end
 
 % --- Executes just before gcodecmd is made visible.
 function gcodecmd_OpeningFcn(hObject, eventdata, handles, varargin)
+
 handles.output = hObject;
 guidata(hObject, handles);
 
@@ -30,17 +67,21 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = gcodecmd_OutputFcn(hObject, eventdata, handles) 
+
 varargout{1} = handles.output;
 
 
 
 function gcodecmd_Callback(hObject, eventdata, handles)
-cmd = get(handles.gcodecmd, 'String');
+     
+
+
 assignin('base', 'cmd', cmd);
 global cmd;
 
 % --- Executes during object creation, after setting all properties.
 function gcodecmd_CreateFcn(hObject, eventdata, handles)
+disp('e')
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
